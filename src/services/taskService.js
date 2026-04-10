@@ -5,7 +5,17 @@ export async function getTasks(weddingId) {
 
   const { data, error } = await supabase
     .from("tasks")
-    .select("*")
+    .select(`
+      *,
+      events (
+        id,
+        name
+      ),
+      members (
+        id,
+        name
+      )
+    `)
     .eq("wedding_id", weddingId)
     .order("created_at", { ascending: false });
 
@@ -21,7 +31,17 @@ export async function createTask(taskData) {
   const { data, error } = await supabase
     .from("tasks")
     .insert([taskData])
-    .select()
+    .select(`
+      *,
+      events (
+        id,
+        name
+      ),
+      members (
+        id,
+        name
+      )
+    `)
     .single();
 
   if (error) {
@@ -37,7 +57,17 @@ export async function updateTask(taskId, updates) {
     .from("tasks")
     .update(updates)
     .eq("id", taskId)
-    .select()
+    .select(`
+      *,
+      events (
+        id,
+        name
+      ),
+      members (
+        id,
+        name
+      )
+    `)
     .single();
 
   if (error) {
@@ -49,7 +79,10 @@ export async function updateTask(taskId, updates) {
 }
 
 export async function deleteTask(taskId) {
-  const { error } = await supabase.from("tasks").delete().eq("id", taskId);
+  const { error } = await supabase
+    .from("tasks")
+    .delete()
+    .eq("id", taskId);
 
   if (error) {
     console.error("Error deleting task:", error);
@@ -64,7 +97,17 @@ export async function updateTaskStatus(taskId, status) {
     .from("tasks")
     .update({ status })
     .eq("id", taskId)
-    .select()
+    .select(`
+      *,
+      events (
+        id,
+        name
+      ),
+      members (
+        id,
+        name
+      )
+    `)
     .single();
 
   if (error) {

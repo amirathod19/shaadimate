@@ -33,7 +33,10 @@ export async function createEvent(eventData) {
 }
 
 export async function deleteEvent(eventId) {
-  const { error } = await supabase.from("events").delete().eq("id", eventId);
+  const { error } = await supabase
+    .from("events")
+    .delete()
+    .eq("id", eventId);
 
   if (error) {
     console.error("Error deleting event:", error);
